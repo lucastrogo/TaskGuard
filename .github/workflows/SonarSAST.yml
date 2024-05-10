@@ -15,8 +15,11 @@ jobs:
           fetch-depth: 0
       - name: Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.1
-      - name: Build
-        run:  mvn -B verify sonar:sonar -Dsonar.projectKey=taskguard -Dsonar.organization=taskguard -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SONAR_TOKEN
+        with:
+          args: >
+            -Dsonar.organization=taskguard
+            -Dsonar.projectKey=taskguard
+            -Dsonar.python.coverage.reportPaths=coverage.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # SonarCloud access token should be generated from https://sonarcloud.io/account/security/
