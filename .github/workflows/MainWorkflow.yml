@@ -5,8 +5,8 @@ on: push
 
 jobs:
   scan:
-    name: Scan secrets
     runs-on: ubuntu-latest
+    name: Scan secrets
     steps:
 
         - name: Checkout repository
@@ -27,9 +27,9 @@ jobs:
               docker run --rm -v $PWD:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/lucastrogo/TaskGuard --exclude-paths=/pwd/trufflehog-exclude-path.txt
 
   build:
-    continue-on-error: false
-    name: SonarCloud
     runs-on: ubuntu-latest
+    needs: scan
+    name: SonarCloud SAST
     steps:
       - uses: actions/checkout@v3
         with:
@@ -50,6 +50,8 @@ jobs:
 
   security:
     runs-on: ubuntu-latest
+    needs: build
+    name: Snyk SCA
     steps:
         - uses: actions/checkout@master
         - name: Run Snyk to check for vulnerabilities
