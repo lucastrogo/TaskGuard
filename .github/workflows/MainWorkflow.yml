@@ -30,20 +30,20 @@ jobs:
               docker run --rm -v $PWD:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/lucastrogo/TaskGuard --exclude-paths=/pwd/trufflehog-exclude-path.txt
 
   build:
+    name: SonarCloud
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'adopt'
-          cache: maven
-      - name: Build with Maven cloud
-        run:  mvn -B verify sonar:sonar -Dsonar.projectKey=taskguard -Dsonar.organization=taskguard -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SONAR_TOKEN
+          # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
+      - name: Scan
+        uses: SonarSource/sonarcloud-github-action@v2.1.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # SonarCloud access token should be generated from https://sonarcloud.io/account/security/
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
   security:
     runs-on: ubuntu-latest
