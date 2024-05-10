@@ -18,7 +18,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=taskguard
-            -Dsonar.projectKey=taskguard
+            -Dsonar.projectKey=taskguard_task-guard
             -Dsonar.python.coverage.reportPaths=coverage.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
