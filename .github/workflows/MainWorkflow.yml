@@ -7,7 +7,7 @@ on:
         - main
 
 jobs:
-  ScanSecrets:
+  scan:
     name: Scan secrets
     runs-on: ubuntu-latest
     steps:
@@ -30,6 +30,7 @@ jobs:
               docker run --rm -v $PWD:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/lucastrogo/TaskGuard --exclude-paths=/pwd/trufflehog-exclude-path.txt
 
   build:
+    continue-on-error: false
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
@@ -39,6 +40,11 @@ jobs:
           fetch-depth: 0
       - name: Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.1
+        with:
+          args: >
+            -Dsonar.organization=taskguard
+            -Dsonar.projectKey=taskguard_task-guard
+            -Dsonar.python.coverage.reportPaths=coverage.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # SonarCloud access token should be generated from https://sonarcloud.io/account/security/
