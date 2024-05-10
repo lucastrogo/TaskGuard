@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='logado.css') }}">
+<head>
+    <title>Página Logada</title>
+</head>
+<body>
+    <header>
+        <h1>Gerenciador de Tarefas</h1>
+        <a href="/logout" class="logout">Deslogar</a>
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %} 
+    {% if messages %} 
+    {% for category, message in messages %} 
+    {% if category == 'error' %}
+    <div class="alert alert-danger alter-dismissable fade show" role="alert">
+      {{ message }}
+      
+    </div>
+    {% else %}
+    <div class="alert alert-success alter-dismissable fade show" role="alert">
+      {{ message }}
+      
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    <section class="arealogin">
+        <div class="login">
+    <h2>Bem-vindo, {{ current_user.nome }}!</h2>
+    <br>
+    <br>
+    <br>
+    <a>Suas Matérias:</a>
+    <ul>
+        {% for materia in materias %}
+            <li class="materias-button">
+                <form method="GET" action="{{ url_for('views.materia', id_materia=materia.id) }}">
+                    <input type="hidden" name="materia_id" value="{{ materia.id }}">
+                    <button class="btnmateria" type="submit" class="btn btn-info">{{ materia.nome }}</button>
+                </form>
+                <form method="POST" action="{{ url_for('views.excluir_materia', id_materia=materia.id) }}">
+                    <button type="submit" class="btnexcluir">X</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <br>
+    <a>Adicionar Matéria:</a>
+    <form method="POST" action="{{ url_for('views.adicionar_materia') }}">
+        <input type="text" name="nome" placeholder="Nome da matéria" class="inputmateria">
+        <input type="submit" value="Adicionar" class="btnadicionar">
+    </form>
+        </div>
+        <div class="fill">
+    </section>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalhes da Matéria</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='materia.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Gerenciador de Tarefas</h1>
+    <a href="/logado" class="voltar">Voltar</a>
+    <a href="/logout" class="logout">Deslogar</a>
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %} 
+    {% if messages %} 
+    {% for category, message in messages %} 
+    {% if category == 'error' %}
+    <div class="alert alert-danger alter-dismissable fade show" role="alert">
+      {{ message }}
+      
+    </div>
+    {% else %}
+    <div class="alert alert-success alter-dismissable fade show" role="alert">
+      {{ message }}
+      
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    <section class="arealogin">
+    <div class="login">
+    <h2>{{ materia.nome }}</h2>
+    <br>
+    <br>
+    <a>Tópicos:</a>
+    <ul>
+        {% for topico in materia.topicos %}
+            <li class="topic-button">
+                <form method="GET" action="{{ url_for('views.topico', id_topico=topico.id) }}">
+                    <input type="hidden" name="topico_id" value="{{ topico.id }}">
+                    {% if topico.completo %}
+                        <button type="submit" class="btntopico"><del>{{ topico.nome }}</del></button>
+                    {% else %}
+                    <button type="submit" class="btntopico">{{ topico.nome }}</button>
+                    {% endif %}
+                </form>
+                <form method="POST" action="{{ url_for('views.excluir_topico', id_topico=topico.id) }}">
+                    <button type="submit" class="btnexcluir">X</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <br>
+    <br>
+    <form method="POST" action="{{ url_for('views.adicionar_topico', id_materia=materia.id) }}">
+        <a>Adicionar tópico:</a>
+        <input type="text" name="nome" class="inputtopico" placeholder="Nome do tópico">
+        <input type="date" id="prazo" name="prazo" class="inputprazo" placeholder="Prazo para o tópico">
+        <input type="submit" value="Adicionar" class="btnadicionar">
+    </form>
+    </div>
+    </section>
+</body>
+</html>
