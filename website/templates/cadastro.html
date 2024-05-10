@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='cadastro.css') }}">
+    <title>Gerenciador de Tarefas</title>
+</head>
+<body>
+    <header>
+        <h1> Gerenciador de Tarefas</h1>
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %} 
+    {% if messages %} 
+    {% for category, message in messages %} 
+    {% if category == 'error' %}
+    <div class="alert alert-danger alter-dismissable fade show" role="alert">
+      {{ message }}
+      
+    </div>
+    {% else %}
+    <div class="alert alert-success alter-dismissable fade show" role="alert">
+      {{ message }}
+      
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    <section class="arealogin">
+        <div class="login">
+            <h2>Cadastro</h2>
+            <form method="post">
+                <br>
+                <input type="text" name="usuario" placeholder="Digite seu usuário">
+                <br>
+                <input type="text" name="nome" placeholder="Digite seu nome">
+                <br>
+                <input type="password" name="senha1" placeholder="Digite sua senha">
+                <input type="password" name="senha2" placeholder="Confirme sua senha">
+                <br>
+                <br>
+                <button type="submit" value="login">Cadastrar</button>
+                <p> Já possui um cadastro? <a href="/">Entre aqui</a></p>
+            </form>
+        </div>
+    </section>
+
+</body>
+</html>
+

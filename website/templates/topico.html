@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalhes do Tópico</title>
+    <!DOCTYPE html>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='topico.css') }}">
+    <html>
+    <head>
+        <title>Detalhes do Tópico</title>
+</head>
+<body>
+    <header>
+        <h1>Gerenciador de Tarefas</h1> 
+        <a href="/materia/{{topico.id_materia}}" class="voltar">Voltar</a>
+        <a href="/logout" class="logout">Deslogar</a>
+        {% if topico.completo %}
+            <a href="/marcar_completo/{{topico.id}}/0" class="completo">Tópico não concluído</a>   
+        {% else %}
+        <a href="/marcar_completo/{{topico.id}}/1" class="completo">Tópico concluído</a>
+        {% endif %}
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %} 
+    {% if messages %} 
+    {% for category, message in messages %} 
+    {% if category == 'error' %}
+    <div class="alert alert-danger alter-dismissable fade show" role="alert">
+      {{ message }}
+      
+    </div>
+    {% else %}
+    <div class="alert alert-success alter-dismissable fade show" role="alert">
+      {{ message }}
+      
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    <section class="arealogin">
+    <div class="login">
+    <h2>{{ topico.nome }}</h2>
+    {% if topico.completo %}
+        <p>Tópico concluído!</p>
+    {% else %}
+        {% if topico.prazo %}
+            {% if diferenca >= 0 %}
+                <p>Faltam {{ diferenca }} dias para o prazo do tópico.</p>
+            {% else %}
+                <p>O tópico está {{ -1*diferenca }} dias atrasado.</p>
+            {% endif %}
+        {% else %}
+            <p>O prazo não foi definido.</p>
+        {% endif %}
+    {% endif %}
+    <br>
+    <br>
+    <a>Anotações:</a>
+    <br>
+    <br>
+    <ul>
+        {% for anotacao in topico.anotacoes %}
+            <li class="anotacoes">
+                <form method="GET" action="{{ url_for('views.topico', id_topico=topico.id) }}">
+                    <li><a class="anotacao">{{ anotacao.texto }}</a></li>
+                </form>
+                <form method="POST" action="{{ url_for('views.excluir_anotacao', id_anotacao=anotacao.id) }}">
+                    <button type="submit" class="btnexcluir">X</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <br>
+    <a>Adicionar Anotação:</a>
+    <form method="POST" action="{{ url_for('views.adicionar_anotacao', id_topico=topico.id) }}">
+        <textarea name="texto" placeholder="Escreva sua anotação aqui" class="textarea1" rows="6" cols="30"></textarea>
+        <input type="submit" value="Adicionar" class="btnadicionar">
+    </form>
+</body>
+</html>
