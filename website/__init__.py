@@ -15,11 +15,11 @@ def criar_app():
     from .views import views
 
     app.register_blueprint(auth, url_prefix='/')
-    app.register_blueprint(views, url_prefix='/') 
-      
+    app.register_blueprint(views, url_prefix='/')
+
     from .models import Usuario, Materia, Topico, Anotacao
     # Cria o banco de dados se ele não existir
-    with app.app_context():    
+    with app.app_context():
         db.create_all()
 
     login_manager = LoginManager()
